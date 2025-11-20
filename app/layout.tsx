@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import Analytics from "@/components/layout/Analytics";
+import { ThemeProvider } from "@/components/layout/ThemeProvider";
+import config from "@/config";
+import "@/styles/globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +26,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900 dark:bg-black dark:text-white`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {/* Main content - renders page components */}
+          {children}
+
+          {/* Analytics tracking: Google Analytics 4, Microsoft Clarity with cookie consent banner, and Vercel Speed Insights */}
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );

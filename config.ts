@@ -4,49 +4,8 @@
 // <PROJECT_DOMAIN>
 // <PROJECT_SUPPORT_EMAIL>
 // <PROJECT_TAGLINE>
-// <STRIPE_TEST_PRICE_ID>
-// <STRIPE_PROD_PRICE_ID>
-// <STRIPE_TEST_PRICE_ID_2>
-// <STRIPE_PROD_PRICE_ID_2>
-// <AWS_BUCKET_NAME>
-// <AWS_CDN_DOMAIN>
 
 const config = {
-  // ======================================================
-  // Carga DaisyUI
-  // ======================================================
-  daisyui: {
-    themes: [
-      "light",
-      "dark",
-      // Si necesitas temas custom, defínelos aquí:
-      {
-        mytheme: {
-          primary: "#570df8",
-          "primary-focus": "#4408d6",
-          "primary-content": "#ffffff",
-          secondary: "#f286c4",
-          "secondary-focus": "#f082ba",
-          "secondary-content": "#000000",
-          accent: "#37cdbe",
-          "accent-focus": "#2aa79b",
-          "accent-content": "#000000",
-          neutral: "#3d4451",
-          "neutral-focus": "#2a2e37",
-          "neutral-content": "#ffffff",
-          "base-100": "#ffffff",
-          "base-200": "#f9fafb",
-          "base-300": "#eff1f5",
-          "base-content": "#1f2937",
-          info: "#0ea5e9",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444",
-        },
-      },
-    ],
-  },
-
   // ======================================================
   // 🔧 PROYECTO BASE (reemplaza estos placeholders)
   // ======================================================
@@ -119,40 +78,6 @@ const config = {
         ],
       },
     ],
-  },
-
-  // ======================================================
-  // ☁️ AWS (opcional)
-  // ======================================================
-  aws: {
-    bucket: "<AWS_BUCKET_NAME>",
-    bucketUrl: `https://<AWS_BUCKET_NAME>.s3.amazonaws.com/`,
-    cdn: "https://<AWS_CDN_DOMAIN>/",
-  },
-
-  // ======================================================
-  // 🎨 COLORES / TEMA
-  // ======================================================
-  colors: {
-    theme: "dark",
-    main: "#00000",
-  },
-
-  // ======================================================
-  // 🔐 AUTENTICACIÓN
-  // ======================================================
-  auth: {
-    loginUrl: "/api/auth/signin",
-    callbackUrl: "/dashboard",
-  },
-
-  // ======================================================
-  // PATCH NOTES
-  // ======================================================
-  patchNotes: {
-    privacyLastUpdate: "2023-10-01",
-    tosLastUpdate: "2023-10-01",
-    projectLastUpdate: "2023-10-01",
   },
 };
 

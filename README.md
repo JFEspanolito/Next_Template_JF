@@ -193,3 +193,15 @@ pnpm lint     # ESLint
 ```
 tree -I '.git|.next|node_modules|.env.local' > tree.txt
 ```
+
+---
+
+## Config recomendada para VSCode
+
+```
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "package.json": "config.js,.eslintrc.json, next.config.js, package-lock.json, postcss.config.js, tailwind.config.ts, jsconfig.json, next-sitemap.config.js, tailwind.config.js,vercel.json,pnpm-lock.yaml,yarn.lock,tsconfig.json,postcss.config.mjs,next.config.ts,next-env.d.ts,eslint.config.mjs,.stylelintrc.json,config.ts",
+    "README.md": ".gitignore,.env.example, .env.local"
+  }
+```
