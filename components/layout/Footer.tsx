@@ -10,7 +10,7 @@ export function Footer() {
 
   return (
     <footer
-      className="relative flex items-center justify-center font-sans dark"
+      className="relative flex items-center justify-center font-sans"
       style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}
     >
       <div className="w-full max-w-3xl mx-auto px-8 py-24">

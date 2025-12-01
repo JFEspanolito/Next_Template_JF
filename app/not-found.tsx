@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <main
-      className="min-h-[calc(100vh-64px)] flex items-center justify-center dark"
+      className="min-h-[calc(100vh-64px)] flex items-center justify-center"
       style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}
     >
       <div className="max-w-3xl text-center px-4">

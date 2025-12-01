@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
-import { SocialDock } from "@/components/layout/SocialDock";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import ThemeProviderWrapper from "@/components/ui/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -73,18 +73,20 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-(--background) text-(--foreground)`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[var(--background)] text-[var(--foreground)]`}
       >
-        <LanguageProvider>
-          {/* Header en la parte superior */}
-          <Header />
+        <ThemeProviderWrapper>
+          <LanguageProvider>
+            {/* Header en la parte superior */}
+            <Header />
 
-          {/* Contenido de la página */}
-          {children}
+            {/* Contenido de la página */}
+            {children}
 
-          {/* Footer al final */}
-          <Footer />
-        </LanguageProvider>
+            {/* Footer al final */}
+            <Footer />
+          </LanguageProvider>
+        </ThemeProviderWrapper>
       </body>
     </html>
   );

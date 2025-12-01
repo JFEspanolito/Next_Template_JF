@@ -7,6 +7,7 @@ import Image from "next/image";
 import config from "@/config";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { SignInModalButton } from "@/components/auth/SignInForm";
+import ThemeToggle from "@/components/buttons/ThemeToggle";
 
 const links = [
   {
@@ -33,7 +34,7 @@ export function Header() {
 
   return (
     <header
-      className="sticky top-0 z-50 flex w-full items-center justify-center font-sans dark"
+      className="sticky top-0 z-50 flex w-full items-center justify-center font-sans"
       style={{
         backgroundColor: "var(--background)",
         color: "var(--foreground)",
@@ -103,7 +104,8 @@ export function Header() {
         </div>
 
         {/* CTA on large screens */}
-        <div className="hidden lg:flex lg:justify-end lg:flex-1">
+        <div className="hidden lg:flex lg:justify-end lg:flex-1 items-center gap-4">
+          <ThemeToggle />
           <SignInModalButton label="Get Started" />
         </div>
       </nav>
@@ -178,7 +180,8 @@ export function Header() {
             </div>
             <div className="divider"></div>
             {/* Your CTA on small screens */}
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-3">
+              <ThemeToggle />
               <SignInModalButton label="Get Started" />
             </div>
           </div>

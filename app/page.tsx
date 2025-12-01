@@ -12,7 +12,7 @@ export default function Home() {
 
   return (
     <div
-      className="relative flex min-h-screen items-center justify-center font-sans dark"
+      className="relative flex min-h-screen items-center justify-center font-sans"
       style={{
         backgroundColor: "var(--background)",
         color: "var(--foreground)",
