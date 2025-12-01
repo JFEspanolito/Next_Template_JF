@@ -1,5 +1,3 @@
-const yearsOfExperience = new Date().getFullYear() - 2012;
-
 export const aboutData = {
   ES: [
     {
