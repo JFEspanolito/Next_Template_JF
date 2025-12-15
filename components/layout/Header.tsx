@@ -109,9 +109,6 @@ export function Header() {
         </div>
       </nav>
 
-      {/* Selector de idioma */}
-      {/* <LanguageSwitcher /> */}
-
       {/* Mobile menu, show/hide based on menu state. */}
       <div className={`relative z-50 ${isOpen ? "" : "hidden"}`}>
         <div
