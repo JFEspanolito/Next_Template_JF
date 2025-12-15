@@ -105,7 +105,7 @@ export function Header() {
         {/* CTA on large screens */}
         <div className="hidden lg:flex lg:justify-end lg:flex-1 items-center gap-4">
           <ThemeToggle />
-          <SignInModalButton label="Get Started" />
+          <SignInModalButton label="Log In" />
         </div>
       </nav>
 
