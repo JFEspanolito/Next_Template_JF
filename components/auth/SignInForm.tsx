@@ -11,6 +11,7 @@ type Props = {
 
 export function SignInForm({ open = true, onClose }: Props) {
   const [message, setMessage] = useState<string | null>(null);
+  const [isErrorMessage, setIsErrorMessage] = useState(false);
 
   // Email/password (template mode)
   const [email, setEmail] = useState("");
@@ -23,7 +24,35 @@ export function SignInForm({ open = true, onClose }: Props) {
 
   const handleProviderSignIn = async (providerId: string) => {
     setMessage(null);
+
     try {
+      // Step 1: Check if provider is configured on server
+      const statusRes = await fetch("/api/auth/providers-status", {
+        cache: "no-store",
+      });
+
+      if (!statusRes.ok) {
+        console.error("[DEV] Failed to fetch provider status");
+        toast.error("Error verificando configuración. Intenta nuevamente.", {
+          duration: 3000,
+          position: "bottom-center",
+        });
+        return;
+      }
+
+      const providerStatus = await statusRes.json();
+
+      // Step 2: Gate-check: if provider not configured, show message and stop
+      if (!providerStatus[providerId]) {
+        console.warn(
+          `[DEV] Provider "${providerId}" is NOT configured. Missing ${providerId.toUpperCase()}_ID or ${providerId.toUpperCase()}_SECRET`
+        );
+        setIsErrorMessage(true);
+        setMessage("Este método de inicio de sesión no está disponible en este momento.");
+        return;
+      }
+
+      // Step 3: Provider is configured, proceed with signIn
       const result = await signIn(providerId, {
         callbackUrl: "/dashboard",
         redirect: false,
@@ -31,10 +60,8 @@ export function SignInForm({ open = true, onClose }: Props) {
 
       if (result?.error || !result?.ok) {
         console.error(`[DEV] OAuth Error (${providerId}):`, result?.error || "Authentication failed");
-        console.warn(`[DEV] Missing env vars: ${providerId.toUpperCase()}_ID and ${providerId.toUpperCase()}_SECRET`);
-        
-        toast.error("Configuración Enviroment Incompleta. Favor de Validar.", {
-          duration: 4000,
+        toast.error("Error al intentar iniciar sesión. Intenta nuevamente.", {
+          duration: 3000,
           position: "bottom-center",
         });
         return;
@@ -55,6 +82,7 @@ export function SignInForm({ open = true, onClose }: Props) {
   const emailPasswordSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
+    setIsErrorMessage(false);
     setEmailError(false);
     setPasswordError(false);
 
@@ -71,6 +99,7 @@ export function SignInForm({ open = true, onClose }: Props) {
     }
 
     if (hasError) {
+      setIsErrorMessage(true);
       setMessage("Please enter email and password.");
       return;
     }
@@ -178,11 +207,11 @@ export function SignInForm({ open = true, onClose }: Props) {
           </div>
 
           {message && (
-            <div className={`text-sm pt-2 px-3 py-2 rounded-md ${
-              emailError || passwordError 
-                ? "bg-red-500/10 text-white-500 border border-red-500/20" 
-                : "text-neutral"
-            }`}>
+            <div
+              className={`text-sm pt-2 px-3 py-2 rounded-md ${
+                emailError || passwordError || isErrorMessage ? "bg-red-500/10 text-white-500 border border-red-500/20" : "text-neutral"
+              }`}
+            >
               {message}
             </div>
           )}
