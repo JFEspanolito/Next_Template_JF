@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type Props = {
   open?: boolean;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function SignInForm({ open = true, onClose }: Props) {
+  const { t } = useLanguage();
   const [message, setMessage] = useState<string | null>(null);
   const [isErrorMessage, setIsErrorMessage] = useState(false);
 
@@ -33,7 +35,7 @@ export function SignInForm({ open = true, onClose }: Props) {
 
       if (!statusRes.ok) {
         console.error("[DEV] Failed to fetch provider status");
-        toast.error("Error verificando configuración. Intenta nuevamente.", {
+        toast.error(t("errorVerifyingConfig"), {
           duration: 3000,
           position: "bottom-center",
         });
@@ -48,7 +50,7 @@ export function SignInForm({ open = true, onClose }: Props) {
           `[DEV] Provider "${providerId}" is NOT configured. Missing ${providerId.toUpperCase()}_ID or ${providerId.toUpperCase()}_SECRET`
         );
         setIsErrorMessage(true);
-        setMessage("Este método de inicio de sesión no está disponible en este momento.");
+        setMessage(t("providerNotAvailable"));
         return;
       }
 
@@ -60,7 +62,7 @@ export function SignInForm({ open = true, onClose }: Props) {
 
       if (result?.error || !result?.ok) {
         console.error(`[DEV] OAuth Error (${providerId}):`, result?.error || "Authentication failed");
-        toast.error("Error al intentar iniciar sesión. Intenta nuevamente.", {
+        toast.error(t("errorSigningIn"), {
           duration: 3000,
           position: "bottom-center",
         });
@@ -72,7 +74,7 @@ export function SignInForm({ open = true, onClose }: Props) {
       }
     } catch (error) {
       console.error(`[DEV] Sign-in exception (${providerId}):`, error);
-      toast.error("Error al intentar iniciar sesión. Intenta nuevamente.", {
+      toast.error(t("errorSigningIn"), {
         duration: 3000,
         position: "bottom-center",
       });
@@ -100,7 +102,7 @@ export function SignInForm({ open = true, onClose }: Props) {
 
     if (hasError) {
       setIsErrorMessage(true);
-      setMessage("Please enter email and password.");
+      setMessage(t("pleaseEnterEmailPassword"));
       return;
     }
 
@@ -108,7 +110,7 @@ export function SignInForm({ open = true, onClose }: Props) {
     try {
       // Template-only behavior (no DB, no real auth)
       await new Promise((r) => setTimeout(r, 400));
-      setMessage(`Email/Password sign-in is running in template mode. Received: ${email.trim()}`);
+      setMessage(`${t("emailPasswordTemplateMode")} ${email.trim()}`);
       // Optionally close modal on "success"
       // onClose?.();
     } finally {
@@ -126,7 +128,7 @@ export function SignInForm({ open = true, onClose }: Props) {
         className="relative w-full max-w-md mx-4 bg-[var(--bg-2)] text-[var(--foreground)] rounded-lg shadow-lg ring-1 ring-neutral/10 overflow-hidden"
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-neutral/10">
-          <h3 className="text-lg font-semibold">Sign in</h3>
+          <h3 className="text-lg font-semibold">{t("signIn")}</h3>
           <button
             aria-label="Close sign in"
             onClick={() => onClose?.()}
@@ -137,13 +139,13 @@ export function SignInForm({ open = true, onClose }: Props) {
         </div>
 
         <div className="p-6 space-y-4">
-          <p className="text-sm text-neutral">Sign in with email/password or one of the following providers:</p>
+          <p className="text-sm text-neutral">{t("signInDescription")}</p>
 
           {/* Email/Password */}
           <form onSubmit={emailPasswordSignIn} className="space-y-3">
             <div className="flex flex-col gap-2">
               <label className="text-sm" htmlFor="email">
-                Email
+                {t("email")}
               </label>
               <input
                 id="email"
@@ -157,13 +159,13 @@ export function SignInForm({ open = true, onClose }: Props) {
                   setEmailError(false);
                 }}
                 autoComplete="email"
-                placeholder="email@providermail.com"
+                placeholder={t("emailPlaceholder")}
               />
             </div>
 
             <div className="flex flex-col gap-2">
               <label className="text-sm" htmlFor="password">
-                Password
+                {t("password")}
               </label>
               <input
                 id="password"
@@ -182,13 +184,13 @@ export function SignInForm({ open = true, onClose }: Props) {
             </div>
 
             <button type="submit" className="btn btn-primary w-full" disabled={emailBusy}>
-              {emailBusy ? "Signing in..." : "Continue with Email"}
+              {emailBusy ? t("signingIn") : t("continueWithEmail")}
             </button>
           </form>
 
           <div className="flex items-center gap-3 py-1">
             <div className="h-px flex-1 bg-neutral/10" />
-            <div className="text-xs text-neutral">OR</div>
+            <div className="text-xs text-neutral">{t("or")}</div>
             <div className="h-px flex-1 bg-neutral/10" />
           </div>
 
@@ -201,7 +203,7 @@ export function SignInForm({ open = true, onClose }: Props) {
               { id: "facebook", name: "Facebook" },
             ].map((p) => (
               <button key={p.id} className="btn btn-outline btn-primary w-full" onClick={() => handleProviderSignIn(p.id)} type="button">
-                Continue with {p.name}
+                {t("continueWith")} {p.name}
               </button>
             ))}
           </div>
@@ -216,7 +218,7 @@ export function SignInForm({ open = true, onClose }: Props) {
             </div>
           )}
 
-          <div className="pt-2 text-xs text-neutral">By signing in you agree to the terms and privacy of the site.</div>
+          <div className="pt-2 text-xs text-neutral">{t("bySigningInAgree")}</div>
         </div>
       </div>
     </div>
