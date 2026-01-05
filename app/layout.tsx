@@ -6,6 +6,7 @@ import { Footer } from "@/layout/Footer";
 import { Header } from "@/layout/Header";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import ThemeProviderWrapper from "@/components/ui/ThemeProvider";
+import Oneko from "@/components/ui/oneko";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -77,6 +78,8 @@ export default function RootLayout({
       >
         <ThemeProviderWrapper>
           <LanguageProvider>
+            <Oneko />
+            
             {/* Header en la parte superior */}
             <Header />
 
