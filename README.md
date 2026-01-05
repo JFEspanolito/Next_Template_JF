@@ -10,42 +10,20 @@ Boilerplate minimal para **Next.js 16.x (App Router)** y **React 19.x**, actuali
 - Theme switch (modo claro / oscuro)
 - Componentes reutilizables y estructura modular
 
----
-
-## ⚙️ Stack
-
-- **Framework:** Next.js 16.x (App Router)
-- **UI Runtime:** React 19.x
-- **Lenguaje:** TypeScript
-- **Estilos:** Tailwind CSS + DaisyUI
-- **Auth:** NextAuth.js v4 (`next-auth`)
-- **DB:** MongoDB + Mongoose
-- **Email:** Resend (opcional)
-- **Payments:** Stripe (opcional)
-- **UX / UI Utils:** Framer Motion, Lucide Icons, Hot Toast
-- **Infra / SEO:** next-sitemap
-- **Theming:** next-themes
-- **Extras:** Top loader, tooltips, syntax highlighting
-
----
-
-## 📦 Dependencias clave reflejadas
-
-- `next@16.x`
-- `react@19.x`
-- `next-auth@4.x`
-- `mongodb@7.x`
-- `mongoose@9.x`
-- `tailwindcss@4.x`
-- `daisyui@5.x`
-- `resend`
-- `stripe`
-- `framer-motion`
-- `next-sitemap`
-- `nextjs-toploader`
-- `react-hot-toast`
-- `lucide-react`
-- `crisp-sdk-web` (si se habilita chat)
+| ⚙️ Stack | 📦 Dependencias clave reflejadas |
+|---------|--------------------------------|
+| **Framework:** Next.js 16.x (App Router) | `next@16.x` |
+| **UI Runtime:** React 19.x | `react@19.x` |
+| **Lenguaje:** TypeScript | `typescript` |
+| **Estilos:** Tailwind CSS + DaisyUI | `tailwindcss@4.x`, `daisyui@5.x` |
+| **Auth:** NextAuth.js v4 | `next-auth@4.x` |
+| **DB:** MongoDB + Mongoose | `mongodb@7.x`, `mongoose@9.x` |
+| **Email:** Resend (opcional) | `resend` |
+| **Payments:** Stripe (opcional) | `stripe` |
+| **UX / UI Utils:** Framer Motion, Lucide, Hot Toast | `framer-motion`, `lucide-react`, `react-hot-toast` |
+| **Infra / SEO:** next-sitemap | `next-sitemap` |
+| **Theming:** next-themes | `next-themes` |
+| **Extras:** Top loader, tooltips, syntax highlighting | `nextjs-toploader`, `crisp-sdk-web` |
 
 ---
 
@@ -72,6 +50,9 @@ Optimizado para evolución rápida sin deuda estructural.
 
 📁 **Estructura básica**
 
+<details>
+  <summary> Tree Map </summary>
+  
 ```
 app/
  ├─ (pages)/               # Rutas públicas agrupadas
@@ -155,7 +136,7 @@ styles/
 config.js                  # Configuración global del proyecto
 ```
 
-Alias de rutas configurado con `@/`.
+</details>
 
 ---
 
@@ -164,7 +145,80 @@ Alias de rutas configurado con `@/`.
 Los componentes del directorio `components/ui` están inspirados y adaptados a partir de:
 
 **ScrollX UI**
-[https://www.scrollxui.dev/docs/components](https://www.scrollxui.dev/docs/components)
+[Componentes de ScrollX UI](https://www.scrollxui.dev/docs/components)
+
+<details>
+  <summary> Modificaciones realizadas </summary>
+
+  - **top-secret:**
+    - Soporta apertura y cierre desde top, bottom, left y right.
+    - Tamaños configurables por porcentaje de viewport: 50 / 80 / 100.
+    - Drag-to-close adaptado a la dirección (vertical u horizontal).
+    - Animaciones con spring/tween según estado y dirección.
+    - Overlay con cierre por clic externo y tecla Escape.
+    - Control controlado/no controlado (open, onOpenChange, defaultOpen).
+    - Override de size y direction desde Root o Content.
+    - Scroll interno independiente con bloqueo de scroll del body.
+  - **text-spotlight:**
+    - Spotlight radial que sigue el mouse y revela el texto mediante máscara.
+    - Modo móvil opcional: revelado progresivo por caracteres al entrar en viewport (IntersectionObserver + requestAnimationFrame).
+    - Personalización separada de estilos: texto apagado (baseTextClassName) vs texto iluminado (textClassName).
+    - Parámetros del haz: color RGB, tamaño y opacidad (spotlightColor, spotlightSize, spotlightOpacity).
+    - Comportamiento hover: el texto iluminado solo aparece al pasar el cursor (opacity toggle).
+  - **magic-dock:**
+    - Permite personalizar estilos del item con `itemClassName`.
+    - Opción `hoverAnimation` para activar/desactivar magnificación y expansión por hover.
+    - Soporta desplazamiento del ícono al hover con `hoverDistance`.
+    - Tooltip configurable arriba/abajo con `labelPosition`.
+    - Hover “estable” con delay (evita flicker) antes de limpiar `hoveredIndex`.
+    - Estilo de borde fijo (ya no cambia por `variant`); `variant` afecta principalmente el fondo del dock y el comportamiento tooltip.
+    - Tooltip simplificado (sin líneas/gradientes decorativas del `variant="tooltip"` original) y con transición de salida explícita.
+    - Dock anclado con `fixed bottom-4` y `z-50` (siempre encima) en lugar de `absolute bottom-2`.
+    - Área clickeable ampliada por item (padding + margen negativo) sin alterar el tamaño visual.
+    - Guard SSR para `matchMedia` en detección de touch device.
+  - **card:**
+    - Simplificado a un solo componente (`Card`) en lugar de un sistema compuesto (CardHeader, CardContent, CardFooter, etc.).
+    - API reducida: recibe `content` explícito en lugar de props arbitrarios (`React.ComponentProps<"div">`).
+    - Eliminados `data-slot` y semántica interna orientada a layouts complejos.
+    - Enfocado a contenedor visual genérico (overlay full con `absolute inset-0`).
+    - Sin estilos de tema (`bg-card`, `text-card-foreground`, `border`, `shadow`).
+    - Bordes más grandes por defecto (`rounded-2xl / sm:rounded-3xl` vs `rounded-xl`).
+    - No impone estructura interna ni spacing (sin `flex`, `gap`, `px`, `py`).
+    - Cambio de helper `cn` importado desde `@/libs/utils`.
+  - **card-flip:**
+    - Soporta `children` como render-prop: permite recibir `{ flip, isFlipped }` para controlar el volteo desde el contenido.
+    - Opción `hideDefaultButtons` para ocultar los botones Info/X integrados.
+    - Calcula y fija la altura máxima entre front/back (ResizeObserver + medición) para evitar “saltos” al voltear.
+    - Fuerza layout estable con `min-h-[250px]` y `h-full` en el contenedor.
+    - Cambia el transform del reverso a `rotateY(180deg)` (en lugar de `-180deg`) manteniendo la misma animación de giro.
+    - Maneja z-index/posición para asegurar que la cara activa quede arriba (front/back alternan `zIndex` y `position`).
+    - Import de `cn` desde `@/libs/utils` en lugar de `@/lib/utils`.
+  - **avatar:**
+
+    - Eliminado Radix UI (`@radix-ui/react-avatar`); implementación 100% custom.
+    - Eliminado soporte de variantes (`close-friends`, `normal`, `none`) y anillos decorativos.
+    - API simplificada: `Avatar` es solo un contenedor `div`.
+    - `AvatarImage` usa `<img>` directo en lugar de `AvatarPrimitive.Image`.
+    - `AvatarFallback` es un contenedor visual simple (sin lógica de fallback automática).
+    - Menos estilos por defecto: sin bordes, sombras ni gradientes.
+    - Tamaño base reducido (`h-10 w-10` en lugar de `h-12 / h-14`).
+    - Sin dependencia de estados internos ni comportamiento controlado por Radix.
+    - Cambio de helper `cn` importado desde `@/libs/utils`.
+
+  </details>
+
+**Oneko**
+[Oneko Pet Selector by kyrie25](https://github.com/kyrie25/spicetify-oneko)
+[Oneko Original by adryd325](https://github.com/adryd325/oneko.js)
+
+<details>
+  <summary> Modificaciones realizadas </summary>
+
+- Cuenta con una "cama" drag and drop para el Pet.
+- Clic izquierdo para mostrar el Pet.
+- Clic derecho para cambiar el estilo del Pet.
+- Clic izquierdo para guardar el Pet.
+</details>
 
 ---
 
@@ -289,7 +343,8 @@ Regla:
 
 ---
 
-### Referencia rápida de campos que suelo modificar
+<details>
+  <summary> Referencia rápida de campos que suelo modificar </summary>
 
 | Archivo                 | Clave / Placeholder                                              | Uso principal                                      |
 | ----------------------- | ---------------------------------------------------------------- | -------------------------------------------------- |
@@ -318,6 +373,8 @@ Regla:
 | `configApi.js`          | `stripePrices.*`                                                 | Price IDs (solo si tu API los necesita)            |
 
 Si quieres adaptar la plantilla a otro proyecto o a otra persona, basta con ajustar estos campos sin tocar los componentes.
+
+</details>
 
 ---
 
@@ -356,6 +413,7 @@ scripts/
 ```
 
 ### `convert_pdf_to_jpg.js`
+
 Convierte **PDF → JPG** (primera página).  
 Requiere Ghostscript + ImageMagick.
 
@@ -366,6 +424,7 @@ node scripts/convert_pdf_to_jpg.js
 ---
 
 ### `convert-images-to-webp.js`
+
 Convierte **.png / .jpg / .jpeg → .webp**, conserva originales.
 
 ```
@@ -373,6 +432,7 @@ node scripts/convert-images-to-webp.js
 ```
 
 ### `normalize-names.js`
+
 Normaliza nombres de archivos/carpetas (acentos, minúsculas, `_`).
 
 ```
@@ -381,6 +441,7 @@ node scripts/normalize-names.js -r
 ```
 
 Modo prueba:
+
 ```
 node scripts/normalize-names.js --dry
 ```
@@ -394,5 +455,31 @@ node scripts/normalize-names.js --dry
   "explorer.fileNesting.patterns": {
     "package.json": ",.eslintrc.json, next.config.js, package-lock.json, postcss.config.js, tailwind.config.ts, jsconfig.json, next-sitemap.config.js, tailwind.config.js,vercel.json,pnpm-lock.yaml,yarn.lock,tsconfig.json,postcss.config.mjs,next.config.ts,next-env.d.ts,eslint.config.mjs,.stylelintrc.json,config.ts,.dockerignore,Dockerfile,vite.config.ts,pnpm-workspace.yaml",
     "README.md": ".gitignore,.env.example,.env.local,.env*,config.js,configApi.js,config.ts,configApi.ts"
-  }
+  },
+```
+
+```
+  "workbench.colorCustomizations": {
+    //Selector Color
+    "editor.selectionBackground": "#ffd54f80",
+    "editor.selectionForeground": "#000000",
+    "editor.inactiveSelectionBackground": "#ffecb340",
+
+    "editor.selectionHighlightBackground": "#00000000",
+    "editor.wordHighlightBackground": "#00000000",
+    "editor.wordHighlightStrongBackground": "#00000000",
+
+    // Apagar barras amarillas de resultados de búsqueda
+    "editor.findMatchBackground": "#00000000",
+    "editor.findMatchHighlightBackground": "#00000000",
+    "editor.findRangeHighlightBackground": "#00000000",
+    "editor.rangeHighlightBackground": "#00000000",
+
+    // Colores personalizados para búsqueda (amarillo transparente)
+    "editor.findMatchBackground": "#ffeb3b99",
+    "editor.findMatchHighlightBackground": "#ffeb3b55",
+    "editor.findRangeHighlightBackground": "#ffeb3b33",
+    "editor.findMatchBorder": "#ffeb3b",
+    "editor.findMatchHighlightBorder": "#ffeb3b"
+  },
 ```
